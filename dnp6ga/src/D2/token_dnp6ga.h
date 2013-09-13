@@ -37,7 +37,8 @@
 #define FLOATN 292
 #define CHAR 293
 #define DOUBLE 294
-
+#define SWITCH 295
+#define CASE 296
 
 typedef union YYSTYPE
 { int i; node *n; double d;}

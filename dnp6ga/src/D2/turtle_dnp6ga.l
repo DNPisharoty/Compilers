@@ -1,7 +1,7 @@
 
 %{
 #include "symtab.h"
-#include "token.h"
+#include "token_dnp6ga.h"
 %}
 
 %%
@@ -49,7 +49,8 @@ ELSE		return ELSE;
 THEN		return THEN;
 WHILE           return WHILE;
 PROCEDURE       return PROC;
-
+SWITCH          return SWITCH;
+CASE            return CASE;
 
 [0-9]+\.[0-9]+  yylval.d = atof(yytext);  return FLOATN;
 [0-9]+  yylval.i = atoi(yytext);  return INTEGER;
@@ -110,6 +111,8 @@ main(){
 	     case DOUBLE: printf("DOUBLE keyword: %s\n",yytext); break;
 	     case VAR: printf("VAR keyword: %s\n",yytext); break;
              case SEMICOLON: printf("Semicolon: %s\n",yytext);break;
+             case SWITCH: printf("SWITCH keyword %s\n",yytext);break;
+             case CASE: printf("CASE keyword: %s\n",yytext);break;
              default:
                         printf("Illegal Character\n"); break;
 
