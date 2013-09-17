@@ -1,0 +1,94 @@
+VAR keyword: VAR
+Identifier:    alpha
+Semicolon: ;
+VAR keyword: VAR
+Identifier:    c
+Semicolon: ;
+VAR keyword: VAR
+Identifier:    n
+Semicolon: ;
+VAR keyword: VAR
+Identifier:    i
+Semicolon: ;
+JUMP keyword: JUMP
+Integer number: 100
+Semicolon: ;
+TURN keyword: TURN
+Integer number: 90
+Semicolon: ;
+JUMP keyword: JUMP
+Integer number: 100
+Semicolon: ;
+TURN keyword: TURN
+Minus operator: -
+Integer number: 90
+Semicolon: ;
+Identifier:    alpha
+Assignment operator: =
+Float number: 77.77
+Semicolon: ;
+Identifier:    c
+Assignment operator: =
+Integer number: 200
+Semicolon: ;
+Identifier:    n
+Assignment operator: =
+Integer number: 50
+Semicolon: ;
+FOR keyword: FOR
+Identifier:    i
+Assignment operator: =
+Integer number: 1
+STEP keyword: STEP
+Integer number: 1
+TO keyword: TO
+Identifier:    n
+DO keyword: DO
+BEGIN keyword: BEGIN
+TURN keyword: TURN
+Identifier:    alpha
+Semicolon: ;
+Identifier:    c
+Assignment operator: =
+Integer number: 200
+Multiplication operator: *
+Identifier:    i
+Division operator: /
+Identifier:    n
+Semicolon: ;
+GO keyword: GO
+Identifier:    c
+Semicolon: ;
+TURN keyword: TURN
+Minus operator: -
+Identifier:    alpha
+Minus operator: -
+Integer number: 90
+Semicolon: ;
+GO keyword: GO
+Sin function: sin
+Identifier:    alpha
+Multiplication operator: *
+Identifier:    c
+Semicolon: ;
+TURN keyword: TURN
+Minus operator: -
+Integer number: 90
+Semicolon: ;
+GO keyword: GO
+Cos function: cos
+Identifier:    alpha
+Multiplication operator: *
+Identifier:    c
+Semicolon: ;
+TURN keyword: TURN
+Integer number: 180
+Semicolon: ;
+TURN keyword: TURN
+Integer number: 2
+Multiplication operator: *
+Integer number: 360
+Division operator: /
+Identifier:    n
+Semicolon: ;
+END keyword: END
