@@ -1,0 +1,12 @@
+GO 100:
+VAR a = 10;
+i = ;
+JUMP c = 3;
+TURN;
+( c = 10);
+cos(90);
+CA= 90 * 10;
+VAR term , a, b;
+FOR i = 1 STEP 1 TO 100 DO:
+BEGIN;
+END;

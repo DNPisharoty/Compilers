@@ -1,0 +1,26 @@
+
+// Comment- test case 1
+
+
+VAR term;
+VAR a;
+VAR b;
+VAR c;
+
+JUMP 90;
+TURN 180;
+JUMP 100;
+TURN -180;
+
+c = 200;
+a = (c + 10.1) * c ;
+term = term / 50;
+
+FOR i=1 STEP 1 TO 100 + sin(90) DO
+BEGIN
+  TURN c;
+  JUMP a * 10 + 20 ;
+  GO b - sin(30) ;
+  a = sqrt(c * b) + cos( sin(term));
+END
+
