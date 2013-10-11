@@ -85,7 +85,7 @@ elseopt: {printf("\n{ \n");}stmt { printf("} ifelse\n");};
 thenstmt: ;
 thenstmt: THEN;
 
-stmt: WHILE OPEN {printf("{ ");} relation {printf("\n{} {exit} ifelse\n");}  CLOSE 
+stmt: WHILE OPEN {printf("{\n");} relation {printf("\n{} {exit} ifelse\n");}  CLOSE 
       whileopt;
 
 whileopt:     OPENB  
