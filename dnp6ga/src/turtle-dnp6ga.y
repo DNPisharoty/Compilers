@@ -2,6 +2,7 @@
 %{
 #include <stdio.h>
 #include "symtab.h"
+int yydebug = 1;
 %}
 
 %union { int i; node *n; double d;}
@@ -21,7 +22,13 @@
 %type <n> decl
 %type <n> decllist
 %type <n> relation
+
+%left PLUS MINUS
+%left TIMES DIV
 %%
+
+
+
 program: head decllist stmtlist tail;
 
 head: { printf("%%!PS Adobe\n"
@@ -50,42 +57,61 @@ stmt: FOR ID ASSIGN expr
           STEP expr
 	  TO expr
 	  DO {printf("{ /tlt%s exch store\n",$2->symbol);} 
-	     stmt {printf("} for\n");};
+          forstmt;
+forstmt: OPENB stmtlist CLOSEB {printf("} for\n");};
+forstmt: stmt {printf("} for\n");};
+
+stmt: IF OPEN relation CLOSE thenstmt {printf("{ \n");}
+      ifopt 
+      elsepart;
+     
+
+ifopt: OPENB stmtlist CLOSEB{ printf("\n}");};
+ifopt: temp SEMICOLON {printf("\n}");};
+
+temp: ID ASSIGN expr{printf("/tlt%s exch store\n",$1->symbol);} ;
+temp: GO expr {printf("0 rlineto\n");};
+temp: JUMP expr{printf("0 rmoveto\n");};
+temp: TURN expr  {printf("rotate\n");};
+temp: CALL ID plist {printf("proc%s\n",$2->symbol);};
 
 
-stmt: IF OPEN  relation  CLOSE thenstmt
-      OPENB { printf("{ \n") ; }
-         stmtlist
-      CLOSEB { printf("}");}
-      elsepart ;
+elsepart: ELSE  elseopt ;
+elsepart:  {printf(" if\n");};
 
-elsepart: {printf(" if\n");};
-elsepart:  ELSE
-      OPENB  { printf("\n{ \n") ; }
-         stmtlist
-      CLOSEB { printf("} ifelse\n");}; 
-      
+elseopt: OPENB {printf("\n { \n");}  stmtlist   CLOSEB  { printf(" } ifelse\n");};
+
+elseopt: {printf("\n{ \n");}stmt { printf("} ifelse\n");};
 thenstmt: ;
-thenstmt: THEN; 
+thenstmt: THEN;
 
+stmt: WHILE OPEN {printf("{ ");} relation {printf("\n{} {exit} ifelse\n");}  CLOSE 
+      whileopt;
 
-stmt: WHILE OPEN {printf("{ ");} relation CLOSE 
-        OPENB {printf("\{} {exit} ifelse\n");}  
+whileopt:     OPENB  
            stmtlist 
         CLOSEB {printf(" } loop\n");};
+whileopt:stmt {printf(" } loop\n");};
+ 
 
-stmt: PROC ID {printf("/proc%s",$2->symbol);} 
+stmt: PROC ID brac {printf("/proc%s",$2->symbol);} 
       OPENB {printf(" {\n");}
        stmtlist 
       CLOSEB  {printf("} def\n");};
 
+brac: ;
+brac: OPEN blank CLOSE;
+blank: ;
+
+
 stmt: CALL ID plist SEMICOLON{printf("proc%s\n",$2->symbol);};
 plist: ;
-plist: plist factor;
+plist: plist atomic;
 
 
 
 stmt: COPEN stmtlist CCLOSE;	 
+
 
 expr: expr PLUS term { printf("add ");};
 expr: expr MINUS term { printf("sub ");};
@@ -105,13 +131,12 @@ relation: factor NOT ASSIGN factor {printf("nq\n");};
 
 factor: MINUS atomic { printf("neg ");};
 factor: PLUS atomic;
-factor: SIN factor { printf("sin ");};
-factor: COS factor { printf("cos ");};
-factor: SQRT factor { printf("sqrt ");};
+factor: SIN atomic{ printf("sin ");};
+factor: COS atomic { printf("cos ");};
+factor: SQRT atomic { printf("sqrt ");};
 factor: atomic;
 
-
-atomic: OPENB expr CLOSEB;
+atomic: OPEN expr CLOSE;
 atomic: NUMBER {printf("%d ",$1);};
 atomic: FLOAT {printf("%f ",$1);};
 atomic: ID {printf("tlt%s ", $1->symbol);};

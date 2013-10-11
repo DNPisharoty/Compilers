@@ -533,10 +533,10 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "turtle.l"
-#line 3 "turtle.l"
+#line 1 "turtle-dnp6ga.l"
+#line 3 "turtle-dnp6ga.l"
 #include "symtab.h"
-#include "turtle.tab.h"
+#include "turtle-dnp6ga.tab.h"
 #line 541 "lex.yy.c"
 
 #define INITIAL 0
@@ -724,7 +724,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 7 "turtle.l"
+#line 7 "turtle-dnp6ga.l"
 
 
 #line 731 "lex.yy.c"
@@ -812,218 +812,218 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "turtle.l"
+#line 9 "turtle-dnp6ga.l"
 ;
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 10 "turtle.l"
+#line 10 "turtle-dnp6ga.l"
 ;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 11 "turtle.l"
+#line 11 "turtle-dnp6ga.l"
 ;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "turtle.l"
+#line 12 "turtle-dnp6ga.l"
 ;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "turtle.l"
+#line 13 "turtle-dnp6ga.l"
 ;              
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 14 "turtle.l"
+#line 14 "turtle-dnp6ga.l"
 ;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 16 "turtle.l"
+#line 16 "turtle-dnp6ga.l"
 return GO;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "turtle.l"
+#line 17 "turtle-dnp6ga.l"
 return TURN; 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "turtle.l"
+#line 18 "turtle-dnp6ga.l"
 return JUMP;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 19 "turtle.l"
+#line 19 "turtle-dnp6ga.l"
 return FOR;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "turtle.l"
+#line 20 "turtle-dnp6ga.l"
 return STEP;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 21 "turtle.l"
+#line 21 "turtle-dnp6ga.l"
 return TO;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 22 "turtle.l"
+#line 22 "turtle-dnp6ga.l"
 return DO;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 23 "turtle.l"
+#line 23 "turtle-dnp6ga.l"
 return COPEN;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 24 "turtle.l"
+#line 24 "turtle-dnp6ga.l"
 return CCLOSE;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 25 "turtle.l"
+#line 25 "turtle-dnp6ga.l"
 return VAR;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 27 "turtle.l"
+#line 27 "turtle-dnp6ga.l"
 return SIN;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "turtle.l"
+#line 28 "turtle-dnp6ga.l"
 return COS;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 29 "turtle.l"
+#line 29 "turtle-dnp6ga.l"
 return SQRT;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 32 "turtle.l"
+#line 32 "turtle-dnp6ga.l"
 return SEMICOLON;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 33 "turtle.l"
+#line 33 "turtle-dnp6ga.l"
 return PLUS;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 34 "turtle.l"
+#line 34 "turtle-dnp6ga.l"
 return MINUS;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 35 "turtle.l"
+#line 35 "turtle-dnp6ga.l"
 return TIMES;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 36 "turtle.l"
+#line 36 "turtle-dnp6ga.l"
 return DIV;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 37 "turtle.l"
+#line 37 "turtle-dnp6ga.l"
 return OPEN;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 38 "turtle.l"
+#line 38 "turtle-dnp6ga.l"
 return CLOSE;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 39 "turtle.l"
+#line 39 "turtle-dnp6ga.l"
 return OPENB;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 40 "turtle.l"
+#line 40 "turtle-dnp6ga.l"
 return CLOSEB;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 41 "turtle.l"
+#line 41 "turtle-dnp6ga.l"
 return COMPARE;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 42 "turtle.l"
+#line 42 "turtle-dnp6ga.l"
 return LESSTHAN;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 43 "turtle.l"
+#line 43 "turtle-dnp6ga.l"
 return GREATTHAN;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 44 "turtle.l"
+#line 44 "turtle-dnp6ga.l"
 return ASSIGN;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 45 "turtle.l"
+#line 45 "turtle-dnp6ga.l"
 return NOT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 46 "turtle.l"
+#line 46 "turtle-dnp6ga.l"
 return IF;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 47 "turtle.l"
+#line 47 "turtle-dnp6ga.l"
 return ELSE;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 48 "turtle.l"
+#line 48 "turtle-dnp6ga.l"
 return THEN;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 49 "turtle.l"
+#line 49 "turtle-dnp6ga.l"
 return WHILE;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 50 "turtle.l"
+#line 50 "turtle-dnp6ga.l"
 return PROC;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 51 "turtle.l"
+#line 51 "turtle-dnp6ga.l"
 return CALL;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 52 "turtle.l"
+#line 52 "turtle-dnp6ga.l"
 return PARAM;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 54 "turtle.l"
+#line 54 "turtle-dnp6ga.l"
 yylval.d = atof(yytext);  return FLOAT;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 55 "turtle.l"
+#line 55 "turtle-dnp6ga.l"
 yylval.i = atoi(yytext);  return NUMBER;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 58 "turtle.l"
+#line 58 "turtle-dnp6ga.l"
 { yylval.n = lookup(yytext);
                           if (yylval.n==NULL)
                             yylval.n = insert(yytext);
@@ -1032,17 +1032,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 64 "turtle.l"
+#line 64 "turtle-dnp6ga.l"
 fprintf(stderr,"\nIllegal Indentifier: %s\n",yytext);
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 66 "turtle.l"
+#line 66 "turtle-dnp6ga.l"
 fprintf(stderr,"Unexpected character %c (%2X)\n",yytext[0],yytext[0]);
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 68 "turtle.l"
+#line 68 "turtle-dnp6ga.l"
 ECHO;
 	YY_BREAK
 #line 1049 "lex.yy.c"
@@ -2043,4 +2043,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 68 "turtle.l"
+#line 68 "turtle-dnp6ga.l"

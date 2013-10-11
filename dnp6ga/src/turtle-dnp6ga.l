@@ -1,7 +1,7 @@
 
 %{
 #include "symtab.h"
-#include "turtle.tab.h"
+#include "turtle-dnp6ga.tab.h"
 %}
 
 %%

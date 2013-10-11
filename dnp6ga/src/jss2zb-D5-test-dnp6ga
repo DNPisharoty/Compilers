@@ -5,11 +5,10 @@ VAR pi;
 VAR index;
 
 pi = 3.14;
-myvar = 27 / sqrt(9) + 10 * sin(pi);
-othervar = 10 - cos(pi/2);
+
 
 GO 27-7+myvar;
-JUMP 10*(2/5)+24;
+
 TURN othervar;
 
 FOR index = -1 
@@ -23,20 +22,17 @@ myvar = 22-pi;
 JUMP myvar;
 END
 
-PROCEDURE a()
+PROCEDURE a
 {
 IF (myvar > pi) THEN 
   {
-   IF(othervar == 12.45) 
-     GO myvar
-   ELSE
-    { 
-     GO dist;
-    }
+  
   }
 ELSE
-   GO dist;
 
+{
+   GO dist;
+}
 index = 0;
 WHILE(index<10)
 {
@@ -46,7 +42,7 @@ i=i+1;
 }
 }
 
-PROCEDURE bettera()
+PROCEDURE bettera
 {
   FOR index = 3
      STEP 5
@@ -56,6 +52,5 @@ PROCEDURE bettera()
        GO index;
 }
 
-CALL a (myvar + 1) (othervar/4) 24.54 80;
 CALL a;
  
