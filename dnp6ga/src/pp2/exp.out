@@ -1,0 +1,4 @@
+WARNING:root:could not open file '/etc/apt/sources.list.d/d-apt.list'
+
+No command 'dcc' found, but there are 22 similar ones
+dcc: command not found

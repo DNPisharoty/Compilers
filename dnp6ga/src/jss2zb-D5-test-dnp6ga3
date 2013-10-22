@@ -5,10 +5,11 @@ VAR pi;
 VAR index;
 
 pi = 3.14;
-
+myvar = 27 / sqrt(9) + 10 * sin(pi);
+othervar = 10 - cos(pi/2);
 
 GO 27-7+myvar;
-
+JUMP 10*(2/5)+24;
 TURN othervar;
 
 FOR index = -1 
@@ -22,7 +23,11 @@ myvar = 22-pi;
 JUMP myvar;
 END
 
-  
+IF(othervar == 12.45) 
+     GO myvar;
+   ELSE
+    GO dist;
+    
 
 
  
