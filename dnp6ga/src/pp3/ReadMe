@@ -1,0 +1,32 @@
+************
+General Idea
+************
+The symbol table is a list of hashtables.
+The 'Value' field in the hash table is a new class called MySymTb, which stores information needed in a symbol table.
+When a new scope is entered, a new hashtable is created and added to the begining of the list. The head of the list represents the most recent scope.
+When a scope is exited, the hashtable is removed from the list. 
+
+Since Decaf allows all declarations in a scope to be visible when the scope is entered, to check for undeclared classes, interfaces(Named types in general), two passes are made.
+
+The fist pass checks for general conflicts within a scope.
+The second pass checks for undeclared classes,interfaces etc. The symbol table at this point contains everything that is visible at the global scope.
+
+Used polymorphism, inheritance and friend functions where needed. In some cases I added get functions to get protected members of the class.
+
+MySymTb lies in ast.h
+
+I haven't implemented much Error Recovery, as that's part of pp4
+ 
+**************************************
+Difference from given  Sample Output
+**************************************
+1]  To check inherited types-
+To check if a derived class's method has the right signature for inherited methods, I first check for methods in the class it extends and then interfaces
+Hence the output of errors is for the inherited class first and then the subsequent implemented classes.
+But all the correct errors are detected and printed, only the order is different from given sample output.
+
+
+My output for bad6.decaf varies from the sample output given
+
+
+
