@@ -1,0 +1,15 @@
+class A{
+}
+void c(int a, int b)
+{
+ this ;
+}
+
+void main()
+{
+int[] f;
+int b;
+int a;
+fa  = NewArray(1.0,int);
+b = f[b];
+}
