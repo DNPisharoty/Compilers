@@ -1,10 +1,12 @@
 class Squash extends Vegetable {
-   void Grow(int [][]water)
- {
-  Print("But I don't like squash\n");
- Print(105);
-  }
+   void Grow(Seeds []seeds, int [][]water)
+   {
+      Print("But I don't like squash\n");
+      Print(10 * 5);
+   }
 }
+
+
 
 class Vegetable {
     int weight;
@@ -12,26 +14,22 @@ class Vegetable {
 
 
     void Eat(Vegetable veg)
-    {
+  {
        Seeds[] s;
        int [][]w;
        color = 5 % 2;
        Print("Yum! ", color, "\n");
-       w = NewArray(5,int[]);
-       //veg.Grow(w);
-       Print(w[0][0]);
+       veg.Grow(s, w);
        return;
     }
 
-   void Grow( int [][]water)
+   void Grow(Seeds []seeds, int [][]water)
    {
-      Print("Grow, little vegetables, grow!\n");
-//      Eat(this);
-   }
+     Print("Grow, little vegetables, grow!\n");
+      Eat(this);
+  }
 }
-void Grow(int a) {
-   Print("mmm... veggies!\n");
-}
+
 
 class Seeds {
    int size;
@@ -41,10 +39,12 @@ class Seeds {
 void main()
 {
    Vegetable []veggies;
+   Vegetable v;
    veggies = NewArray(2, Vegetable);
    veggies[0] = New(Squash);
    veggies[1] = New(Vegetable);
-   Grow(10);
+//   Grow(10);
+//   v = New(Vegetable);
    veggies[1].Eat(veggies[0]);
 }
 

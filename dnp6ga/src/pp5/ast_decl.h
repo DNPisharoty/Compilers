@@ -51,11 +51,14 @@ class VarDecl : public Decl
     VarDecl(Identifier *name, Type *type);
     void Check();
     Type *GetDeclaredType() { return type; }
-    
+    bool IsVarDecl() { return true;} 
      Location* Emit(CodeGenerator *cg);
     Location* GetVarLoc(){ return varLoc;}
     void SetVarLoc(Location *x){ varLoc = x;}
     Location* EmitGlobal(CodeGenerator *cg);
+    Location* EmitParam(CodeGenerator *cg);
+    Location* EmitParamInClass(CodeGenerator *cg);
+
 };
 
 class ClassDecl : public Decl 
@@ -78,6 +81,10 @@ class ClassDecl : public Decl
     void CheckIntf( List<NamedType*> *implements);
     List<NamedType*> * getInterface(){ return implements;}
     NamedType* getBase(){ return extends;}
+    Location* Emit(CodeGenerator *cg);
+    Identifier* getId(){ return id;}
+   List<Decl*>* getMembers(){ return members;}
+   NamedType* GetExtends(){ return extends;}
 };
 
 class InterfaceDecl : public Decl 
@@ -99,7 +106,7 @@ class FnDecl : public Decl
     List<VarDecl*> *formals;
     Type *returnType;
     Stmt *body;
-    
+    Location *returnLoc;    
   public:
     FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
     void SetFunctionBody(Stmt *b);
@@ -111,9 +118,10 @@ class FnDecl : public Decl
     void MatchesDefinition(List<Expr*> *other, Identifier*);
     Type* getReturnType() { return returnType;} 
 
-
+   void SetReturnLoc(Location *x){ returnLoc = x;}
+   Location* GetReturnLoc(){ return returnLoc;}
    Location* Emit( CodeGenerator *cg);
- 
+   Identifier* getId(){ return id;} 
 };
 
 #endif

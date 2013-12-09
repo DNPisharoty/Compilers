@@ -12,6 +12,8 @@
 #include "codegen.h"
         
 extern int tcount;         
+extern int hasMain;
+//int isInClass = 0;
 Decl::Decl(Identifier *n) : Node(*n->GetLocation()) {
     Assert(n != NULL);
     (id=n)->SetParent(this); 
@@ -281,19 +283,88 @@ void ClassDecl::CheckIntf(List<NamedType*> *implements)
   }
 Location* FnDecl::Emit(CodeGenerator *cg)
 {
+ tcount = 0;
+  if(strcmp(id->GetName(),"main") == 0)
+  {	cg->GenLabel(id->GetName());
+ 	hasMain++;
+  }
+  else
+   {
+     if(this->GetParent()->IsClassDecl())
+       {
+        const char * l2 = dynamic_cast<ClassDecl*>(this->GetParent())->GetId()->GetName() ;
+        const char * l1 = "_";
+        char *totalLine = (char*)malloc(strlen(l1) + strlen(l2) + 1);
+        if (totalLine != NULL)
+        {
+        strcpy(totalLine, l1);
+        strcat(totalLine, l2);
+        }
+        const char * l3 = ".";
+        char *total1 = (char*)malloc(strlen(totalLine) + strlen(l3) + 1);
+        if (total1 != NULL)
+        {
+        strcpy(total1, totalLine);
+        strcat(total1, l3);
+        }
 
-  
-  cg->GenLabel(id->GetName());
+        const char * l4 = id->GetName();
+        char *total2 = (char*)malloc(strlen(total1) + strlen(l4) + 1);
+        if (total2 != NULL)
+        {
+        strcpy(total2, total1);
+        strcat(total2, l4);
+        }
+ 
+	 cg->GenLabel(total2); 
 
+        }
+     else{
+     	const char * line1 = "_";
+     	const char * line2 = id->GetName();
+    	char *totalLine = (char*)malloc(strlen(line1) + strlen(line2) + 1);
+  	if (totalLine != NULL)
+  	{
+     	strcpy(totalLine, line1);
+     	strcat(totalLine, line2);
+  	}
+     	cg->GenLabel(totalLine);
+       }
+   
+    }
+   
   BeginFunc *fp = cg->GenBeginFunc();
   //char *s = NewLabel();
-    
-   body->Emit(cg);
+//-- Check if in class body
+  Node *tmp = this;
+  int inClass = 0;
+  while(tmp!=NULL)
+  {
+     if(tmp->IsClassDecl())
+	{
+		inClass = 1;
+                break;
+       }
+     tmp = tmp->GetParent();
+ 
+ }
+
+  if(inClass == 1)
+   {
+         formals->EmitAllParamsInClass(cg);
+         inClass = 1;
+   }
+    else
+    {
+ 	formals->EmitAllParams(cg);  
+     }
+    body->Emit(cg);
   //somehow set fp frame size
-
+// isInClass = 0;
  fp->SetFrameSize(tcount*4);
-  cg->GenEndFunc();
-
+ cg->GenEndFunc();
+ tcount = 0;
+// std::cout<<tcount;  
   return NULL;
 }
 
@@ -324,3 +395,112 @@ Location* VarDecl::EmitGlobal(CodeGenerator *cg)
  return NULL;
 }
 
+Location* VarDecl::EmitParam(CodeGenerator *cg)
+{
+  Location *x = cg->StoreParam(id->GetName(),fpRelative);
+ if(x != NULL)
+  {
+   Decl *d = FindDecl(id);
+   VarDecl *vd = dynamic_cast<VarDecl*>(d);
+   vd->SetVarLoc(x);
+ }
+ return NULL;
+}
+Location* VarDecl::EmitParamInClass(CodeGenerator *cg)
+{
+  Location *x = cg->StoreParamInClass(id->GetName(),fpRelative);
+ if(x != NULL)
+  {
+   Decl *d = FindDecl(id);
+   VarDecl *vd = dynamic_cast<VarDecl*>(d);
+   vd->SetVarLoc(x);
+ }
+ return NULL;
+}
+
+
+Location* ClassDecl::Emit(CodeGenerator *cg)
+{
+  List<const char*> *mem = new List<const char*>();
+  members->EmitAll(cg);
+  if(extends!=NULL)
+  {
+        Decl *d = FindDecl(extends->GetId());
+        ClassDecl *cd = dynamic_cast<ClassDecl*>(d);
+        List<Decl*> *members = cd->getMembers(); 
+         for(int i = 0; i < members->NumElements(); i ++)
+         {
+     		if(members->Nth(i)->IsFnDecl())
+      		{
+        		const char * l2 = extends->GetId()->GetName();
+        		const char * l1 = "_";
+
+
+        		char *totalLine = (char*)malloc(strlen(l1) + strlen(l2) + 1);
+        		if (totalLine != NULL)
+        		{
+        			strcpy(totalLine, l1);
+        			strcat(totalLine, l2);
+        		}
+        		const char * l3 = ".";
+        		char *total1 = (char*)malloc(strlen(totalLine) + strlen(l3) + 1);
+        		if (total1 != NULL)
+        		{
+        			strcpy(total1, totalLine);
+        			strcat(total1, l3);
+        		}
+
+        		const char * l4 = members->Nth(i)->GetId()->GetName();
+        		char *total2 = (char*)malloc(strlen(total1) + strlen(l4) + 1);
+        		if (total2 != NULL)
+        		{
+        		strcpy(total2, total1);
+        		strcat(total2, l4);
+        		}
+
+
+            		mem->Append(total2);
+		}
+          }	
+       
+
+  }
+  for(int i = 0; i < members->NumElements(); i ++)
+   {
+     if(members->Nth(i)->IsFnDecl())
+      {
+        const char * l2 = id->GetName();
+        const char * l1 = "_";
+        
+	
+        char *totalLine = (char*)malloc(strlen(l1) + strlen(l2) + 1);
+        if (totalLine != NULL)
+        {
+        strcpy(totalLine, l1);
+        strcat(totalLine, l2);
+        }
+        const char * l3 = ".";
+        char *total1 = (char*)malloc(strlen(totalLine) + strlen(l3) + 1);
+        if (total1 != NULL)
+        {
+        strcpy(total1, totalLine);
+        strcat(total1, l3);
+        }
+
+        const char * l4 = members->Nth(i)->GetId()->GetName();
+        char *total2 = (char*)malloc(strlen(total1) + strlen(l4) + 1);
+        if (total2 != NULL)
+        {
+        strcpy(total2, total1);
+        strcat(total2, l4);
+        }
+
+
+            mem->Append(total2);
+ 
+    }
+   } 
+  // std::cout<<"yo"<<this->getId()->GetName(); 
+   cg->GenVTable(getId()->GetName(),mem);
+  return NULL;
+}

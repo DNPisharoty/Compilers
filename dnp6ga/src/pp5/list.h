@@ -103,7 +103,19 @@ template<class Element> class List {
 				Location *x = Nth(i)->Emit(cg);
             }
 
-                 
+ void EmitAllParams(CodeGenerator *cg)
+  {
+     for(int i = 0  ; i < NumElements()  ; i++)
+	Nth(i)->EmitParam(cg);
+
+ }
+   void EmitAllParamsInClass(CodeGenerator *cg)
+  {
+     for(int i = 0  ; i < NumElements()  ; i++)
+        Nth(i)->EmitParamInClass(cg);
+
+ }
+               
 };
 
 #endif

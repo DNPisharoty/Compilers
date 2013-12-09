@@ -335,8 +335,7 @@ return NULL;
 Location* ReturnStmt::Emit(CodeGenerator *cg)
 {
    Location *l =  expr->Emit(cg);
-   if(expr->IsArrayAccessType())
-	l = cg->GenLoad(l);   
+   
    cg->GenReturn(l);
 
    return l;

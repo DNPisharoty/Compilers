@@ -234,4 +234,25 @@ Location * CodeGenerator::StoreGlobalVar( const char * st, Segment s)
 
         return x;
 }
+Location * CodeGenerator::StoreParam( const char * st, Segment s)
+{
+    static int pcount = 0;
+
+         Location *x =  new Location(s,(pcount*4)+4,st);
+          pcount++;
+
+
+        return x;
+}
+
+Location * CodeGenerator::StoreParamInClass( const char * st, Segment s)
+{
+    static int icount = 1;
+
+         Location *x =  new Location(s,(icount*4)+4,st);
+          icount++;
+
+
+        return x;
+}
 

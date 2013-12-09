@@ -171,8 +171,6 @@ class CodeGenerator {
     Location*  StoreVar(const char *, Segment s);
     Location*  StoreGlobalVar(const char *, Segment s);
     Location*  StoreParam(const char *, Segment s);
-    Location*  StoreParamInClass(const char *, Segment s);
-
 };
 
 #endif

@@ -1,0 +1,14 @@
+class A
+{
+int x;
+void fn()
+{
+//x = 1;
+}
+}
+void main()
+{
+A a;
+a = New(A);
+//a.fn();
+}

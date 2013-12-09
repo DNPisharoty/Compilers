@@ -653,10 +653,7 @@ Location* RelationalExpr::Emit(CodeGenerator *cg)
 
   Location *l = left->Emit(cg);
   Location *r = right->Emit(cg);
-   if(left->IsArrayAccessType())
-		l = cg->GenLoad(l);
-   if(right->IsArrayAccessType())
-              r = cg->GenLoad(r);  
+  
   if(strcmp(op->GetOp(),"<=") == 0)
   {	Location* t1 = cg->GenBinaryOp("<",l,r);
         Location* t2 = cg->GenBinaryOp("==",l,r);
@@ -685,10 +682,6 @@ Location* EqualityExpr::Emit(CodeGenerator *cg)
    
     if(left->getExprType()->IsEquivalentTo(Type::stringType))
    {
-         if(left->IsArrayAccessType())
-               l = cg->GenLoad(l);
-         if(right->IsArrayAccessType())
-	       r = cg->GenLoad(r);
          cg->GenPushParam(r);
          cg->GenPushParam(l);
          Location *t = cg->GenLCall("_StringEqual",true);     
@@ -761,9 +754,6 @@ Location* AssignExpr::Emit(CodeGenerator *cg)
 	{
              Location *l = left->Emit(cg);
              Location *r = right->Emit(cg);
-             if(right->IsArrayAccessType())  //NIGHTMARE
-                r = cg->GenLoad(r);
-
               cg->GenStore(l,r,0);
              
  
@@ -771,8 +761,6 @@ Location* AssignExpr::Emit(CodeGenerator *cg)
 	}   
         
         Location *r = right->Emit(cg);
-       if(right->IsArrayAccessType())
-		r = cg->GenLoad(r);
 
      if(r == NULL)
                 std::cout<<"ass";
@@ -791,12 +779,12 @@ Location* AssignExpr::Emit(CodeGenerator *cg)
      tmp = tmp->GetParent();
 
    }
-    //f(!isInClass or !left->IsFieldAccess())
-    //
-    //rintf("Here\n");
+   if(!isInClass or !left->IsFieldAccess())
+     {
+       printf("Here\n");
    	l = left->Emit(cg);
-	//
-  // printf("Made It!\n");
+     }
+   printf("Made It!\n");
    if(isInClass == 1)
    {
        ClassDecl *cd = dynamic_cast<ClassDecl*>(tmp);
@@ -819,24 +807,6 @@ Location* AssignExpr::Emit(CodeGenerator *cg)
  			}
                       }
         }
-           NamedType *bt = cd->GetExtends();
-
-         if(bt != NULL)
-       {
-                Decl* tmp = FindDecl(bt->GetId());
-            ClassDecl* ecd = dynamic_cast<ClassDecl*>(tmp);
-            List<Decl*> *mem = ecd->getMembers();
-            int numE = 0;
-            for(int i = 0 ; i < mem->NumElements(); i++)
-            {
-                if(mem->Nth(i)->IsVarDecl())
-                         numE++;
-            }
-             if(index != -1)
-            	index = index + numE;
-
-      }
-
         isInClass = 0;
         if(index == -1)
          {
@@ -867,8 +837,7 @@ Location* AssignExpr::Emit(CodeGenerator *cg)
          }
         if(index != -1)
         { 
-                 
-               cg->GenStore(CodeGenerator::ThisPtr,r,(index+1)*4); //NOOOO
+               cg->GenStore(CodeGenerator::ThisPtr,r,(index+1)*4);
                return NULL;
 
 
@@ -926,22 +895,7 @@ Location* FieldAccess::Emit(CodeGenerator *cg)
          //std::cout<<index<<field->GetName();
  
         NamedType *bt =   cd->GetExtends();
-        if(bt != NULL)
-       {
-		Decl* tmp = FindDecl(bt->GetId());
-            ClassDecl* ecd = dynamic_cast<ClassDecl*>(tmp);
-            List<Decl*> *mem = ecd->getMembers();
-            int numE = 0;
-            for(int i = 0 ; i < mem->NumElements(); i++)
-            {
-                if(mem->Nth(i)->IsVarDecl())
-                         numE++;
-            }
-            if(index != -1)
-	    	index = index + numE;
-
-      }
-           
+            
         if(index == -1)
         {
             if(bt!=NULL)
@@ -951,7 +905,7 @@ Location* FieldAccess::Emit(CodeGenerator *cg)
             List<Decl*> *mem = ecd->getMembers();
            
        	     
-       	   
+       	    
              for(int i = 0 ; i < mem->NumElements(); i++)
             {
                 if(mem->Nth(i)->IsVarDecl())
@@ -969,13 +923,11 @@ Location* FieldAccess::Emit(CodeGenerator *cg)
          }
         if(index == -1)
              {
-//                  std::cout<<"here"; 
+                   
                   Decl *d = this->FindDecl(field);
 
 		  VarDecl *vd = dynamic_cast<VarDecl*>(d);
-       //         std::cout<<vd->GetId()<<std::endl;         
-
-		 return vd->GetVarLoc();
+         		 return vd->GetVarLoc();
 
 
              } 
@@ -994,91 +946,30 @@ Location* FieldAccess::Emit(CodeGenerator *cg)
 
 Location* Call::Emit(CodeGenerator *cg)
 {
-     Node *tmp = this;
-      int inC = 0, flagS = 0;
-     if(base == NULL)
-    {
-      while(tmp != NULL)
-       {
-           if(tmp->IsClassDecl())
-                {
-                 inC = 1;
-                 break;
-                 }
-           tmp = tmp->GetParent();
-       }
-      if(inC == 1)
-      {
-      //      int flagS = 0;
-          ClassDecl *cd = dynamic_cast<ClassDecl*>(tmp);
-          List<Decl*> *md = cd->getMembers();
-          for(int i = 0; i < md->NumElements(); i++)
-          {
-                if(md->Nth(i)->IsFnDecl())
-                {
-                        if(strcmp(md->Nth(i)->GetId()->GetName(),field->GetName())==0)
-                          { flagS =1;
-                            break;
-                          }
-                }
-          }
-            NamedType *nm = cd->GetExtends();
-                if(nm!=NULL)
-                {
-                 Decl *d = FindDecl(nm->GetId());
-                ClassDecl *ecd = dynamic_cast<ClassDecl*>(d);
-                List<Decl*> *md = ecd->getMembers();
-                for(int i = 0; i < md->NumElements(); i++)
-                {
-                      if(md->Nth(i)->IsFnDecl())
-                        {
-                           
-                         if( strcmp(md->Nth(i)->GetId()->GetName(),field->GetName()) == 0)
-                                {           
-                                    flagS = 1 ;
-                                    tmp = ecd;
-                                     break;
-                                 }
-                        }
-
-                }
-
-               }// exten    
-        }
-     }
- 
- if(base == NULL && flagS == 0)
+  if(base == NULL)
   {
-    
+   
    for(int i =  actuals->NumElements()-1; i >= 0; i--)
      {
-              Location *tmp = actuals->Nth(i)->Emit(cg); 
-              if(actuals->Nth(i)->IsArrayAccessType())
-	             if(actuals->Nth(i)->getExprType()->IsArrayType())
-				tmp = cg->GenLoad(tmp);
-              cg->GenPushParam(tmp); 
+              cg->GenPushParam(actuals->Nth(i)->Emit(cg)); 
 
      }
 
 
       Decl *d = FindDecl(field);
       FnDecl *fd = dynamic_cast<FnDecl*>(d);
-           //check if in class and is class member
-      
-   //-------------------------------------------
-     
+      Location *t;
       const char * l2 = field->GetName();
       const char * l1 = "_";
 
 
-       char *totalLine = (char*)malloc(strlen(l1) + strlen(l2) + 1);
+        char *totalLine = (char*)malloc(strlen(l1) + strlen(l2) + 1);
         if (totalLine != NULL)
         {
         strcpy(totalLine, l1);
         strcat(totalLine, l2);
         }
-    
-     Location *t;
+ 
      if(  fd->getReturnType() != NULL)
        {  
           if( fd->getReturnType()->IsEquivalentTo(Type::nullType) || fd->getReturnType()->IsEquivalentTo(Type::voidType) || fd->getReturnType()->IsEquivalentTo(Type::errorType) ) 
@@ -1099,10 +990,6 @@ Location* Call::Emit(CodeGenerator *cg)
     return t;
   }
    else{
-              
-             if(base!=NULL)
-          {
-
            Type *t = base->getExprType(); ///Arrays length()
            if(t->IsArrayType() && strcmp(field->GetName(),"length") == 0)
 	  {	
@@ -1110,140 +997,66 @@ Location* Call::Emit(CodeGenerator *cg)
               return cg->GenLoad(bt,-4); 
 
           }
-          }
-         
-         //else  //class member fns
+         else  //class member fns
           {
-                
-               Decl *d;
-               ClassDecl *cd;
-                Location *t; 
-                Location *t2;
-               
-               if(base != NULL)
-               {  
-  //               std::cout<<"here";
-                 d = FindDecl(dynamic_cast<NamedType*>(base->getExprType())->GetId());
-                  
-                 cd = dynamic_cast<ClassDecl*>(d);
-        //          std::cout<<cd->GetId();
-                // t = base->Emit(cg);             
-                // t2 = cg->GenLoad(t);
-               }
-               else
-		{
-                 //  std::cout<<"here";
-                  cd = dynamic_cast<ClassDecl*>(tmp); 
-                // t2 = cg->GenLoad(CodeGenerator::ThisPtr);    
-                // t = CodeGenerator::ThisPtr;
-                
-		}
-
-
+               Decl *d = FindDecl(dynamic_cast<NamedType*>(base->getExprType())->GetId());
+               ClassDecl *cd = dynamic_cast<ClassDecl*>(d);
+               Location *t = base->Emit(cg);
+               Location *t2 = cg->GenLoad(t);
 
                List<Decl*> *md = cd->getMembers();
                int index = -1;
-               int j = -1;
                for(int i = 0; i < md->NumElements(); i++)
                {
                       if(md->Nth(i)->IsFnDecl())
 			{
-			 j++;					
+			  index++;					
 			 if( strcmp(md->Nth(i)->GetId()->GetName(),field->GetName()) == 0)
 			{
-                              index = j;   
+                              
                                break;
                                 }
                         
                         }
  
-             
-		}
-                //std::cout<<index<<cd->GetId()->GetName()<<field->GetName(); 
-              if(index == -1)
+               }
+              //std::cout<<index;
+               if(index == -1)
               {
 
-             ////  	Decl *d = FindDecl(dynamic_cast<NamedType*>(base->getExprType())->GetId());
-             ////  	ClassDecl *cd = dynamic_cast<ClassDecl*>(d);
+               	Decl *d = FindDecl(dynamic_cast<NamedType*>(base->getExprType())->GetId());
+               	ClassDecl *cd = dynamic_cast<ClassDecl*>(d);
                	//Location *t = base->Emit(cg);
                	//Location *t2 = cg->GenLoad(t);
 
                	NamedType *nm = cd->GetExtends();
-                int index1 = -1;
-                j  = -1;
                 if(nm!=NULL)
                 {
                  d = FindDecl(nm->GetId());
                 ClassDecl *ecd = dynamic_cast<ClassDecl*>(d);
                 List<Decl*> *md = ecd->getMembers();
-                   
                	for(int i = 0; i < md->NumElements(); i++)
                	{
                       if(md->Nth(i)->IsFnDecl())
                         {
-                            index1++;
+                            index++;
                          if( strcmp(md->Nth(i)->GetId()->GetName(),field->GetName()) == 0)
-                                { 
-					index1 = j;
-                                        break;}
+                                {                                 break;}
                         }
 
                	}
                                 
                }// extends
-             }
-       
-         
-                 //    Location *t3 = cg->GenLoad(t2,(index)*4); //change to offset into vtable
+               }
+               Location *t3 = cg->GenLoad(t2,(index)*4); //change to offset into vtable
                            
                
-               List<Location*> *params = new List<Location*>();
 
-               for(int i =  0; i < actuals->NumElements(); i++)
+               for(int i =  actuals->NumElements()-1; i >= 0; i--)
 	     	{
-
-		           Location *tmp = actuals->Nth(i)->Emit(cg);
-                           if(actuals->Nth(i)->IsArrayAccessType())
-                                        //if(actuals->Nth(i)->getExprType()->IsArrayType())
-                                                tmp = cg->GenLoad(tmp);
-              
-		          params->Append(tmp);
-                          //cg->GenPushParam(actuals->Nth(i)->Emit(cg));
+                          cg->GenPushParam(actuals->Nth(i)->Emit(cg));
 
      		}
-
-
-                 if(base != NULL)
-               {
-       
-                 t = base->Emit(cg);
-           
-                 if(base->IsArrayAccessType())
-			t = cg->GenLoad(t);
-                 t2 = cg->GenLoad(t);
-
-               }
-               else
-                {
-          
-                 t2 = cg->GenLoad(CodeGenerator::ThisPtr);
-                 t = CodeGenerator::ThisPtr;
-
-           
-                }
-                Location *t3 = cg->GenLoad(t2,(index)*4); //change to offset into vtable
-
-
-
-                for(int i =   params->NumElements()-1 ; i >=0 ; i--)
-                {
-                         // params->Append(actuals->Nth(i)->Emit(cg));
-                          cg->GenPushParam(params->Nth(i));
-
-                }
-
-
-              
                cg->GenPushParam(t);
 
                 
@@ -1321,11 +1134,11 @@ Location* NewArrayExpr::Emit(CodeGenerator *cg)
      Location *four = cg->GenLoadConstant(4);
      Location *sbytes = cg->GenBinaryOp("*",base,four);
      Location *stmp = sbytes;
-   /*if(elemType->IsArrayType())
+   if(elemType->IsArrayType())
   {
      
  	sbytes = cg->GenBinaryOp("*",sbytes,sbytes);
-   }*/// Made change
+   }
      cg->GenPushParam(sbytes);
      Location *t = cg->GenLCall("_Alloc",true);
      cg->GenPopParams(4);
@@ -1363,8 +1176,6 @@ Location* ArrayAccess::Emit(CodeGenerator *cg)
   
     
     Location *sub = subscript->Emit(cg); 
-    if(subscript->IsArrayAccessType())
-	sub = cg->GenLoad(sub);
     Location *zero = cg->GenLoadConstant(0);
 
 
@@ -1393,25 +1204,17 @@ Location* ArrayAccess::Emit(CodeGenerator *cg)
     Location *addr;
     if(tmp->IsArrayAccessType())
          {//do long calc
-               ArrayAccess *aa = dynamic_cast<ArrayAccess*>(tmp);
-               if(!aa->GetSubscript()->IsArrayAccessType())
-              {
+             //  ArrayAccess *aa = dynamic_cast<ArrayAccess*>(tmp);
+              // if(!( aa->GetSubscript() == dynamic_cast<Expr*>(this)))
+               //{
                Location *t1 = cg->GenBinaryOp("*",size,four);
                Location *t2 = cg->GenBinaryOp("*",sub,four);
                Location *t3 = cg->GenBinaryOp("+",t1,t2);
                addr = cg->GenBinaryOp("+",l,t3);
-               }
-               else
-                {
-                  if(!aa->GetBase()->IsArrayAccessType())
-                     		 addr = cg->GenBinaryOp("+",itmp,loc);
-                  else
-			{
-				 addr = cg->GenBinaryOp("+",itmp,loc);
-				 addr = cg->GenLoad(addr);
-			}
+               //}
+               //else
+		 //addr = cg->GenBinaryOp("+",itmp,loc);
 
-                }
 
      }
 
@@ -1419,7 +1222,7 @@ Location* ArrayAccess::Emit(CodeGenerator *cg)
 
 
      else
-           	addr = cg->GenBinaryOp("+",itmp,loc);
+    	addr = cg->GenBinaryOp("+",itmp,loc);
    
     
         

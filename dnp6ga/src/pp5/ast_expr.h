@@ -24,8 +24,9 @@ class Expr : public Stmt
     Expr(yyltype loc) : Stmt(loc) {}
     Expr() : Stmt() {}
     virtual Type* getExprType(){ return NULL;}
-  //  virtual void IsArrayType(){return false;}
-};
+    virtual bool IsArrayAccessType(){return false;}
+   virtual bool IsFieldAccess() { return false;}
+ };
 
 /* This node type is used for those places where an expression is optional.
  * We could use a NULL pointer, but then it adds a lot of checking for
@@ -88,7 +89,7 @@ class NullConstant: public Expr
   public: 
     NullConstant(yyltype loc) : Expr(loc) {}
     Type* getExprType();
-    Location *Emit(CodeGenerator *cg){ return NULL;}
+    Location *Emit(CodeGenerator *cg){ return cg->GenLoadConstant(0);}
 
 };
 
@@ -190,7 +191,7 @@ class This : public Expr
     This(yyltype loc) : Expr(loc) {}
     void Check();
     Type* getExprType();
-
+    Location *Emit(CodeGenerator *cg){ return cg->GenLoad(CodeGenerator::ThisPtr);}   
 };
 
 class ArrayAccess : public LValue 
@@ -202,7 +203,10 @@ class ArrayAccess : public LValue
     ArrayAccess(yyltype loc, Expr *base, Expr *subscript);
    void Check();
    Type* getExprType();
-
+   bool IsArrayAccessType(){return true;}
+   Location* Emit(CodeGenerator *cg);
+   Expr* GetSubscript(){ return subscript;}
+   Expr* GetBase(){ return base;}
 };
 
 /* Note that field access is used both for qualified names
@@ -215,14 +219,16 @@ class FieldAccess : public LValue
   protected:
     Expr *base;	// will be NULL if no explicit base
     Identifier *field;
-    
+     
   public:
     FieldAccess(Expr *base, Identifier *field); //ok to pass NULL base
     Type* getExprType();
      void Check();
     Location *Emit(CodeGenerator *cg);
+    Identifier* GetField(){ return field; }
+    bool IsFieldAccess() { return true;}
 
-};
+ };
 
 /* Like field access, call is used both for qualified base.field()
  * and unqualified field().  We won't figure out until later
@@ -239,7 +245,7 @@ class Call : public Expr
     void Check();
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
     Type* getExprType();
-//    Location *Emit(CodeGenerator *cg);
+    Location *Emit(CodeGenerator *cg);
 
 };
 
@@ -252,6 +258,7 @@ class NewExpr : public Expr
     NewExpr(yyltype loc, NamedType *clsType);
     Type* getExprType();
     void Check();
+    Location* Emit(CodeGenerator *cg);
 };
 
 class NewArrayExpr : public Expr
@@ -264,7 +271,7 @@ class NewArrayExpr : public Expr
     NewArrayExpr(yyltype loc, Expr *sizeExpr, Type *elemType);
     Type* getExprType();
     void Check();
-    
+    Location* Emit(CodeGenerator *cg); 
 };
 
 class ReadIntegerExpr : public Expr

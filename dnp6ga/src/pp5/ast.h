@@ -53,6 +53,8 @@ class Node
      virtual bool IsClassDecl() {return false;}
    virtual bool IsStmtBlock(){ return false;} 
    virtual bool IsLoopStmt(){return false;}
+  virtual bool IsArrayAccessType(){return false;}
+
     typedef enum { kShallow, kDeep } lookup;
     virtual Decl *FindDecl(Identifier *id, lookup l = kDeep);
     virtual Scope *PrepareScope() { return NULL; }
